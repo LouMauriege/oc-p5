@@ -1,0 +1,50 @@
+Table users {
+  id integer [pk, increment]
+  username varchar(255)
+  email varchar(255)
+  password varchar(255)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table posts {
+  id integer [pk, increment]
+  user_id integer
+  title varchar(255)
+  content varchar(2000)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Table topics {
+  id integer [pk, increment]
+  name varchar(255)
+}
+
+Table posts_topics {
+  post_id integer
+  topic_id integer
+}
+
+Table subscriptions {
+  user_id integer
+  topic_id integer
+  subscribed_at timestamp
+}
+
+Table comments {
+  id integer [pk, increment]
+  post_id integer
+  user_id integer
+  content varchar(2000)
+  created_at timestamp
+  updated_at timestamp
+}
+
+Ref: posts.user_id > users.id
+Ref: posts_topics.post_id > posts.id
+Ref: posts_topics.topic_id > topics.id
+Ref: subscriptions.user_id > users.id
+Ref: subscriptions.topic_id > topics.id
+Ref: comments.post_id > posts.id
+Ref: comments.user_id > users.id
