@@ -16,10 +16,13 @@ spring:
     url: jdbc:mysql://localhost:3307/mdd
     username: myuser
     password: mypassword
+  sql:
+    init:
+      mode: always
   jpa:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
-      ddl-auto: 'update'
+      ddl-auto: 'none'
     show-sql: 'true'
     properties:
       hibernate:
