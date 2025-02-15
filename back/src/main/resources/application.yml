@@ -23,15 +23,15 @@ spring:
     database-platform: org.hibernate.dialect.MySQL8Dialect
     hibernate:
       ddl-auto: 'none'
-    show-sql: 'true'
+#    show-sql: 'true'
     properties:
       hibernate:
         format_sql: 'true'
-# test credentials TO DELETE
-  security:
-    user:
-      name: user
-      password: passwd
+
+jwt:
+  secret: password
+  token:
+    lifespan: 3600000
 
 # Enable actuator endpoints
 management:
