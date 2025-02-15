@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,6 +27,8 @@ public class User {
 
     @Column(unique = true)
     private String email;
+
+    @JsonIgnore
     private String password;
 
     @CreatedDate

@@ -29,9 +29,8 @@ spring:
         format_sql: 'true'
 
 jwt:
-  secret: password
-  token:
-    lifespan: 3600000
+  secret-key: password
+  expiration-in-minutes: 30
 
 # Enable actuator endpoints
 management:
