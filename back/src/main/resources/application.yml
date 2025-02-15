@@ -27,6 +27,11 @@ spring:
     properties:
       hibernate:
         format_sql: 'true'
+# test credentials TO DELETE
+  security:
+    user:
+      name: user
+      password: passwd
 
 # Enable actuator endpoints
 management:
