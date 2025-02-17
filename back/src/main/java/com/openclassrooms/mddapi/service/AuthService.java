@@ -34,9 +34,6 @@ public class AuthService {
     private JwtUtils jwtUtils;
 
     private final AuthenticationManager authenticationManager;
-//
-//    @Autowired
-//    private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
@@ -45,30 +42,21 @@ public class AuthService {
     private RefreshTokenRepository refreshTokenRepository;
 
     public LoginResponse login(LoginRequest request) {
-        System.out.println("request into authservice : " + request);
         Authentication authentication = authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
         );
-        System.out.println("Authentication from authserv : " + authentication);
-
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        System.out.println("User principal from jwt : " + userPrincipal.getEmail());
         User user = userService.getUserEntityByEmail(request.getEmail());
         System.out.println(user);
-//        UserDto user1 = userService.getUserByEmail(request.getEmail());
-//        System.out.println(user1);
-
-//        User user = new User();
 
         List<String> roles = userPrincipal.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
                 .toList();
 
-        String accessToken = jwtUtils.jwtIssuer(userPrincipal.getUserId(), userPrincipal.getEmail(), roles);
+        String accessToken = jwtUtils.jwtIssuer(userPrincipal.getUserId(), user.getEmail(), roles);
 
-//        String refreshToken = "refreshtoekn";
         String refreshToken = jwtUtils.refreshTokenIssuer(user, roles);
         saveRefreshToken(user, refreshToken);
 
@@ -83,7 +71,6 @@ public class AuthService {
         refreshToken.setUserId(user);
         refreshToken.setToken(refreshTokenToSave);
         refreshToken.setExpirationDate(Instant.now().plus(tokenConfig.getRefreshTokenExpirationInDays(), ChronoUnit.DAYS));
-        RefreshTokenEntity refreshTokenEntity = refreshTokenRepository.save(refreshToken);
-        System.out.print(refreshTokenEntity);
+        refreshTokenRepository.save(refreshToken);
     }
 }
