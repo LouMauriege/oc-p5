@@ -30,7 +30,8 @@ spring:
 
 jwt:
   secret-key: password
-  expiration-in-minutes: 30
+  jwt-expiration-in-minutes: 30
+  refresh-token-expiration-in-days: 30
 
 # Enable actuator endpoints
 management:

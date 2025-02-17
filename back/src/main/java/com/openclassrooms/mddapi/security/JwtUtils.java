@@ -3,7 +3,8 @@ package com.openclassrooms.mddapi.security;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.interfaces.DecodedJWT;
-import com.openclassrooms.mddapi.config.JwtConfig;
+import com.openclassrooms.mddapi.config.TokenConfig;
+import com.openclassrooms.mddapi.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -17,19 +18,19 @@ import java.util.List;
 @RequiredArgsConstructor
 public class JwtUtils {
 
-    private final JwtConfig jwtConfig;
+    private final TokenConfig tokenConfig;
 
     public String jwtIssuer(Long userId, String email, List<String> roles) {
         return JWT.create()
                 .withSubject(String.valueOf(userId))
-                .withExpiresAt(Instant.now().plus(Duration.of(jwtConfig.getExpirationInMinutes(), ChronoUnit.MINUTES)))
+                .withExpiresAt(Instant.now().plus(Duration.of(tokenConfig.getJwtExpirationInMinutes(), ChronoUnit.MINUTES)))
                 .withClaim("email", email)
                 .withClaim("roles", roles)
-                .sign(Algorithm.HMAC256(jwtConfig.getSecretKey()));
+                .sign(Algorithm.HMAC256(tokenConfig.getSecretKey()));
     }
 
     public DecodedJWT jwtDecoder(String token) {
-        return JWT.require(Algorithm.HMAC256(jwtConfig.getSecretKey()))
+        return JWT.require(Algorithm.HMAC256(tokenConfig.getSecretKey()))
                 .build()
                 .verify(token);
     }
@@ -46,5 +47,14 @@ public class JwtUtils {
         var claim = jwt.getClaim("roles");
         if (claim.isNull() || claim.isMissing()) return List.of();
         return claim.asList(SimpleGrantedAuthority.class);
+    }
+
+    public String refreshTokenIssuer(User user, List<String> roles) {
+        return JWT.create()
+                .withSubject(String.valueOf(user.getId()))
+                .withExpiresAt(Instant.now().plus(Duration.of(tokenConfig.getRefreshTokenExpirationInDays(), ChronoUnit.DAYS)))
+                .withClaim("email", user.getEmail())
+                .withClaim("roles", roles)
+                .sign(Algorithm.HMAC256(tokenConfig.getSecretKey()));
     }
 }

@@ -1,5 +1,6 @@
 package com.openclassrooms.mddapi.service;
 
+import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -17,7 +18,7 @@ public class CustomUserDetailService implements UserDetailsService {
 
     @Override
     public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {
-        var user = userService.findByEmail(username).orElseThrow();
+        UserDto user = userService.getUserByEmail(username);
         return UserPrincipal.builder()
                 .userId(user.getId())
                 .email(user.getEmail())

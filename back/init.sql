@@ -9,6 +9,14 @@ CREATE TABLE users (
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
 );
 
+CREATE TABLE refresh_tokens (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    user_id BIGINT NOT NULL,
+    token VARCHAR(255) NOT NULL,
+    expiration_date DATETIME NOT NULL,
+    FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+);
+
 CREATE TABLE posts (
     id BIGINT PRIMARY KEY AUTO_INCREMENT,
     user_id BIGINT NOT NULL,
@@ -25,7 +33,6 @@ CREATE TABLE topics (
     description TEXT
 );
 
--- Table to link posts and their topics
 CREATE TABLE post_topics (
     post_id BIGINT NOT NULL,
     topic_id BIGINT NOT NULL,
@@ -34,7 +41,6 @@ CREATE TABLE post_topics (
     FOREIGN KEY (topic_id) REFERENCES topics(id) ON DELETE CASCADE
 );
 
--- Table to link users subscriptions on topics
 CREATE TABLE subscriptions (
     user_id BIGINT NOT NULL,
     topic_id BIGINT NOT NULL,
@@ -54,8 +60,12 @@ CREATE TABLE comments (
     FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
 );
 
+CREATE UNIQUE INDEX `users_index` ON `users` (`email`);
 
--- Datas
+
+
+
+
 INSERT INTO users (name, email, password) VALUES
-    ('Stewe', 'stewe@griffin.fox', 'passwd'),
+    ('Stewe', 'stewe@griffin.fox', '$2a$12$RTLVMmcLk/n9y712QIVOYOod4olXuS3p.MVGcnuSbEHkRVhMJeDHe'),
     ('Bryan', 'bryan@grffin.fox', 'writer');
