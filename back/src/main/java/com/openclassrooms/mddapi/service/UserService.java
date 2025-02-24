@@ -28,4 +28,9 @@ public class UserService {
         return userRepository.findByEmail(email).orElseThrow(
             () -> new UserNotFound("Utilisateur non trouvé !"));
     }
+
+    public UserDto getUserById(Long id) {
+        return userMapper.toDTO(userRepository.findById(id).orElseThrow(
+                () -> new UserNotFound("Utilisateur non trouvé !")));
+    }
 }

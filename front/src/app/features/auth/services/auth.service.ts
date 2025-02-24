@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginRequest } from '../interfaces/loginRequest.interface';
 import { LoginResponse } from '../interfaces/loginResponse.interface';
+import { User } from 'src/app/interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root'
@@ -15,5 +16,9 @@ export class AuthService {
 
   public login(loginRequest: LoginRequest): Observable<LoginResponse> {
     return this.httpClient.post<LoginResponse>(`${this.pathService}/login`, loginRequest);
+  }
+
+  public me(): Observable<User> {
+    return this.httpClient.get<User>(`api/user/me`);
   }
 }
