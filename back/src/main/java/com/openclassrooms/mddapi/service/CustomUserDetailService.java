@@ -3,6 +3,7 @@ package com.openclassrooms.mddapi.service;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -14,7 +15,9 @@ import java.util.List;
 @Component
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
-    private final UserService userService;
+
+    @Autowired
+    private UserService userService;
 
     @Override
     public UserPrincipal loadUserByUsername(String username) throws UsernameNotFoundException {

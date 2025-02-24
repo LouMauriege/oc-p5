@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginRequest } from '../interfaces/loginRequest.interface';
+import { RegisterRequest } from '../interfaces/registerRequest.interface';
 import { LoginResponse } from '../interfaces/loginResponse.interface';
 import { User } from 'src/app/interfaces/user.interface';
 
@@ -15,7 +16,12 @@ export class AuthService {
   constructor(private httpClient: HttpClient) { }
 
   public login(loginRequest: LoginRequest): Observable<LoginResponse> {
+    // localStorage.removeItem('mdd_jwt');
     return this.httpClient.post<LoginResponse>(`${this.pathService}/login`, loginRequest);
+  }
+
+  public register(registerRequest: RegisterRequest): Observable<LoginResponse> {
+    return this.httpClient.post<LoginResponse>(`${this.pathService}/register`, registerRequest);
   }
 
   public me(): Observable<User> {

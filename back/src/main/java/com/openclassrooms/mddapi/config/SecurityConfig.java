@@ -20,7 +20,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @RequiredArgsConstructor
 public class SecurityConfig {
     private final JwtAuthenticationFilter jwtAuthenticationFilter;
-    private final CustomUserDetailService customUserDetailService;
+//    private final CustomUserDetailService customUserDetailService;
 
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
@@ -45,7 +45,7 @@ public class SecurityConfig {
     @Bean
     public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
         return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .userDetailsService(customUserDetailService)
+                .userDetailsService(customUserDetailService())
                 .passwordEncoder(passwordEncoder())
                 .and().build();
     }
@@ -53,5 +53,10 @@ public class SecurityConfig {
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
+    }
+
+    @Bean
+    public CustomUserDetailService customUserDetailService() {
+        return new CustomUserDetailService();
     }
 }

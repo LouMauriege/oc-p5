@@ -2,6 +2,7 @@ package com.openclassrooms.mddapi.controller;
 
 import com.openclassrooms.mddapi.model.LoginRequest;
 import com.openclassrooms.mddapi.model.LoginResponse;
+import com.openclassrooms.mddapi.model.RegisterRequest;
 import com.openclassrooms.mddapi.security.JwtUtils;
 import com.openclassrooms.mddapi.service.AuthService;
 import lombok.RequiredArgsConstructor;
@@ -29,8 +30,13 @@ public class AuthController {
     }
 
     @PostMapping("/logout")
-    public ResponseEntity<?> logout(@RequestBody Map<String, String> request) {
+    public ResponseEntity<String> logout(@RequestBody Map<String, String> request) {
         // TODO: Faire la logique du logout
         return ResponseEntity.ok("Logged out successfully !");
+    }
+
+    @PostMapping("/register")
+    public ResponseEntity<LoginResponse> register(@RequestBody @Validated RegisterRequest request) {
+        return authService.register(request);
     }
 }
