@@ -39,17 +39,17 @@ public class AuthController {
 
     @PostMapping("/login")
     public LoginResponse login(@RequestBody @Validated LoginRequest request) {
-//        var authentication = authenticationManager.authenticate(
-//                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
-//        );
-//        SecurityContextHolder.getContext().setAuthentication(authentication);
-//        var principal = (UserPrincipal) authentication.getPrincipal();
-//
-//        var roles = principal.getAuthorities().stream()
-//                .map(GrantedAuthority::getAuthority)
-//                .toList();
-//
-//        var token = jwtUtils.jwtIssuer(principal.getUserId(), principal.getEmail(), roles);
+        var authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword())
+        );
+        SecurityContextHolder.getContext().setAuthentication(authentication);
+        var principal = (UserPrincipal) authentication.getPrincipal();
+
+        var roles = principal.getAuthorities().stream()
+                .map(GrantedAuthority::getAuthority)
+                .toList();
+
+        var token = jwtUtils.jwtIssuer(principal.getUserId(), principal.getEmail(), roles);
 //        return LoginResponse.builder()
 //                .jwt(token)
 //                .build();

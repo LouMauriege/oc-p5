@@ -48,21 +48,21 @@ public class AuthService {
         SecurityContextHolder.getContext().setAuthentication(authentication);
 
         UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
-        User user = userService.getUserEntityByEmail(request.getEmail());
-        System.out.println(user);
+//        User user = userService.getUserEntityByEmail(request.getEmail());
+//        System.out.println(user);
 
-        List<String> roles = userPrincipal.getAuthorities().stream()
-                .map(GrantedAuthority::getAuthority)
-                .toList();
+//        List<String> roles = userPrincipal.getAuthorities().stream()
+//                .map(GrantedAuthority::getAuthority)
+//                .toList();
 
         String accessToken = jwtUtils.jwtIssuer(userPrincipal.getUserId(), user.getEmail(), roles);
 
-        String refreshToken = jwtUtils.refreshTokenIssuer(user, roles);
-        saveRefreshToken(user, refreshToken);
+//        String refreshToken = jwtUtils.refreshTokenIssuer(user, roles);
+//        saveRefreshToken(user, refreshToken);
 
         return LoginResponse.builder()
                 .jwt(accessToken)
-                .refreshToken(refreshToken)
+//                .refreshToken(refreshToken)
                 .build();
     }
 
