@@ -12,5 +12,4 @@ import org.springframework.context.annotation.Configuration;
 public class TokenConfig {
     private String secretKey;
     private Long jwtExpirationInMinutes;
-    private int refreshTokenExpirationInDays;
 }

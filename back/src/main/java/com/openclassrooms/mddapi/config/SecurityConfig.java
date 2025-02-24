@@ -50,26 +50,6 @@ public class SecurityConfig {
                 .and().build();
     }
 
-////    @Autowired
-////    public void configure(AuthenticationManagerBuilder builder) {
-////        builder.eraseCredentials(false);
-////    }
-
-//    // Dummy user for testing
-//    @Bean
-//    public UserDetailsService userDetailsService() {
-//        UserDetails user = User.withUsername("user")
-//                .password(passwordEncoder().encode("passwd"))
-//                .roles("USER")
-//                .build();
-//        UserDetails admin = User.withUsername("admin")
-//                .password(passwordEncoder().encode("passwd"))
-//                .roles("ADMIN", "USER")
-//                .build();
-//
-//        return new InMemoryUserDetailsManager(user, admin);
-//    }
-//
     @Bean
     public PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();

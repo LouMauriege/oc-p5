@@ -29,15 +29,6 @@ public class JwtUtils {
                 .sign(Algorithm.HMAC256(tokenConfig.getSecretKey()));
     }
 
-    public String refreshTokenIssuer(User user, List<String> roles) {
-        return JWT.create()
-                .withSubject(String.valueOf(user.getId()))
-                .withExpiresAt(Instant.now().plus(Duration.of(tokenConfig.getRefreshTokenExpirationInDays(), ChronoUnit.DAYS)))
-                .withClaim("email", user.getEmail())
-                .withClaim("roles", roles)
-                .sign(Algorithm.HMAC256(tokenConfig.getSecretKey()));
-    }
-
     public DecodedJWT jwtDecoder(String token) {
         return JWT.require(Algorithm.HMAC256(tokenConfig.getSecretKey()))
                 .build()
