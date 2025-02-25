@@ -10,14 +10,8 @@ import java.time.LocalDateTime;
 @Data
 @AllArgsConstructor
 @Builder
-public class UserDto {
+public class TopicDto {
     private Long id;
     private String name;
-    private String email;
-
-    @JsonIgnore
-    private String password;
-
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
+    private String description;
 }

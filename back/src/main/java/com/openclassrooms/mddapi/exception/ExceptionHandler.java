@@ -10,4 +10,9 @@ public class ExceptionHandler {
     public ResponseEntity<Object> userNotFound(UserNotFound userNotFound) {
         return new ResponseEntity<>("Utilisateur non trouvé !", HttpStatus.NOT_FOUND);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler({TopicNotFound.class})
+    public ResponseEntity<Object> topicNotFound(TopicNotFound topicNotFound) {
+        return new ResponseEntity<>("Topic non trouvé !", HttpStatus.NOT_FOUND);
+    }
 }
