@@ -52,8 +52,20 @@ CREATE UNIQUE INDEX `users_index` ON `users` (`email`);
 
 
 INSERT INTO users (name, email, password) VALUES
-    ('Stewe', 'stewe@griffin.fox', '$2a$12$RTLVMmcLk/n9y712QIVOYOod4olXuS3p.MVGcnuSbEHkRVhMJeDHe');
+    ('Stewe1', 'stewe1@griffin.fox', '$2a$12$RTLVMmcLk/n9y712QIVOYOod4olXuS3p.MVGcnuSbEHkRVhMJeDHe'),
+    ('Stewe2', 'stewe2@griffin.fox', '$2a$12$RTLVMmcLk/n9y712QIVOYOod4olXuS3p.MVGcnuSbEHkRVhMJeDHe');
 
 INSERT INTO topics (name, description) VALUES
     ('Javascript', 'Discussions et méthodologies avec javascript.'),
-    ('Java', 'Le java sous tous ses angles !')
+    ('Yaml', 'Pourquoi le Yaml est-il bien meilleur que le .properties'),
+    ('Java', 'Le java sous tous ses angles !');
+
+INSERT INTO subscriptions (user_id, topic_id) VALUES
+    (1, 2),
+    (1, 3);
+
+INSERT INTO posts (user_id, topic_id, title, content) VALUES
+    (2, 1, 'Article sur le js', 'Mon super contenue pour un article js'),
+    (2, 2, 'Article sur le Yaml', 'Voici pourquoi je ne suis pas pratiquant des .properties'),
+    (2, 2, 'Encore le Yaml', 'Encore et toujours du YAML pour remplacer les fichiers properties'),
+    (2, 3, 'Du java ??', 'Pourquoi le logo est-il une tasse ?');

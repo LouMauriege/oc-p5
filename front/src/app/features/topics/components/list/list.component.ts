@@ -1,21 +1,28 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { TopicService } from '../../services/topic.service';
 
 @Component({
   selector: 'app-list',
   standalone: true,
   imports: [CommonModule],
   template: `
-    <p>
-      list works!
-    </p>
+    <div *ngFor="let topic of (topics$ | async)">
+        <p>{{ topic.id }}</p>
+        <p>{{ topic.name }}</p>
+        <p>{{ topic.description }}</p>
+    </div>
   `,
   styles: [
   ]
 })
 export class ListComponent implements OnInit {
 
-  constructor() { }
+    public topics$ = this.topicService.all();
+
+  constructor(
+    private topicService: TopicService
+  ) { }
 
   ngOnInit(): void {
   }

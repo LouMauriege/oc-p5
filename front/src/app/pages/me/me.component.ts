@@ -31,6 +31,7 @@ import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequ
         <p>email: {{ user.email }}</p>
         <p>created_at: {{ user.createdAt }}</p>
         <p>updated_at: {{ user.updatedAt }}</p>
+        <p>sub: {{ user.topics }}</p>
     </div>
   `,
   styles: [
@@ -58,6 +59,7 @@ export class MeComponent implements OnInit {
   ngOnInit(): void {
     this.authService.me().subscribe(
         (user: User) => {
+            console.log(user);
             this.user = user
             this.updateUserForm.setValue({
                 email: user.email,
