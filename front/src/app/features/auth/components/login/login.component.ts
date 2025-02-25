@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 import { LoginRequest } from '../../interfaces/loginRequest.interface';
@@ -34,7 +35,8 @@ export class LoginComponent implements OnInit {
     });
 
     constructor(
-        private authService: AuthService
+        private authService: AuthService,
+        private router: Router
     ) {}
 
     ngOnInit(): void {
@@ -44,14 +46,10 @@ export class LoginComponent implements OnInit {
     public async onSubmit(): Promise<void> {
         const loginRequest = this.loginForm.value as LoginRequest;
 
-        localStorage.removeItem('mdd_jwt');
-
         this.authService.login(loginRequest).subscribe(
             (response: LoginResponse) => {
                 localStorage.setItem('mdd_jwt', response.jwt);
-                this.authService.me().subscribe((user: User) => {
-                    console.log(user);
-                })
+                this.router.navigate(['/me']);
             }
         );
     }

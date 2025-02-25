@@ -4,6 +4,7 @@ import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.exception.UserNotFound;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.model.RegisterRequest;
+import com.openclassrooms.mddapi.model.UpdateUserRequest;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -54,5 +55,16 @@ public class UserService {
                 .build();
         User createdUser = userRepository.save(user);
         System.out.print(createdUser);
+    }
+
+    public void updateUser(Long userId, UpdateUserRequest updateUserRequest) {
+        User existingUser = userRepository.findById(userId).orElseThrow(
+                () -> new UserNotFound("User non trouvé !")
+        );
+        existingUser.setName(updateUserRequest.getName());
+        existingUser.setEmail(updateUserRequest.getEmail());
+        existingUser.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
+        User updatedUser = userRepository.save(existingUser);
+        System.out.print(updatedUser);
     }
 }

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 import { RegisterRequest } from '../../interfaces/registerRequest.interface';
@@ -37,7 +38,8 @@ export class RegisterComponent implements OnInit {
     })
 
   constructor(
-    private authService: AuthService
+    private authService: AuthService,
+    private router: Router
   ) { }
 
   ngOnInit(): void {
@@ -48,14 +50,10 @@ export class RegisterComponent implements OnInit {
 
         console.log(registerRequest);
 
-        localStorage.removeItem('mdd_jwt');
-
         this.authService.register(registerRequest).subscribe(
             (response: LoginResponse) => {
                 localStorage.setItem('mdd_jwt', response.jwt);
-                this.authService.me().subscribe((user: User) => {
-                    console.log(user);
-                })
+                this.router.navigate(['/me']);
             }
         );
   }

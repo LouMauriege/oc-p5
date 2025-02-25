@@ -3,6 +3,7 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { LoginRequest } from '../interfaces/loginRequest.interface';
 import { RegisterRequest } from '../interfaces/registerRequest.interface';
+import { UpdateUserRequest } from '../interfaces/updateUserRequest.interface';
 import { LoginResponse } from '../interfaces/loginResponse.interface';
 import { User } from 'src/app/interfaces/user.interface';
 
@@ -25,5 +26,9 @@ export class AuthService {
 
   public me(): Observable<User> {
     return this.httpClient.get<User>(`api/user/me`);
+  }
+
+  public update(updateUserRequest: UpdateUserRequest): any {
+    return this.httpClient.post<UpdateUserRequest>(`api/user/update`, updateUserRequest);
   }
 }
