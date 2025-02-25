@@ -3,19 +3,21 @@ import { ReactiveFormsModule, Validators, FormGroup, FormControl } from '@angula
 import { CommonModule } from '@angular/common';
 
 import { AuthService } from '../../services/auth.service';
-import { LoginRequest } from '../../interfaces/loginRequest.interface';
+import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { LoginResponse } from '../../interfaces/loginResponse.interface';
 import { User } from 'src/app/interfaces/user.interface';
 
 @Component({
-  selector: 'app-login',
+  selector: 'app-register',
   standalone: true,
   imports: [
     CommonModule,
     ReactiveFormsModule
-],
+  ],
   template: `
-    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+        <label for="username">Name :</label>
+        <input type="text" name="name" formControlName="name" id="name" required />
         <label for="username">E-mail :</label>
         <input type="text" name="email" formControlName="email" id="email" required />
         <label for="password">Mot de passe :</label>
@@ -26,27 +28,29 @@ import { User } from 'src/app/interfaces/user.interface';
   styles: [
   ]
 })
-export class LoginComponent implements OnInit {
+export class RegisterComponent implements OnInit {
 
-    loginForm = new FormGroup({
+    registerForm = new FormGroup({
+        name: new FormControl(''),
         email: new FormControl(''),
         password: new FormControl('')
-    });
+    })
 
-    constructor(
-        private authService: AuthService
-    ) {}
+  constructor(
+    private authService: AuthService
+  ) { }
 
-    ngOnInit(): void {
+  ngOnInit(): void {
+  }
 
-    }
+  public async onSubmit(): Promise<void> {
+        const registerRequest = this.registerForm.value as RegisterRequest;
 
-    public async onSubmit(): Promise<void> {
-        const loginRequest = this.loginForm.value as LoginRequest;
+        console.log(registerRequest);
 
         localStorage.removeItem('mdd_jwt');
 
-        this.authService.login(loginRequest).subscribe(
+        this.authService.register(registerRequest).subscribe(
             (response: LoginResponse) => {
                 localStorage.setItem('mdd_jwt', response.jwt);
                 this.authService.me().subscribe((user: User) => {
@@ -54,6 +58,6 @@ export class LoginComponent implements OnInit {
                 })
             }
         );
-    }
+  }
 
 }

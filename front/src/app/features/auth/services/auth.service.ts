@@ -16,7 +16,6 @@ export class AuthService {
   constructor(private httpClient: HttpClient) { }
 
   public login(loginRequest: LoginRequest): Observable<LoginResponse> {
-    // localStorage.removeItem('mdd_jwt');
     return this.httpClient.post<LoginResponse>(`${this.pathService}/login`, loginRequest);
   }
 
