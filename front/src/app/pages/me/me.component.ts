@@ -31,7 +31,8 @@ import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequ
         <p>email: {{ user.email }}</p>
         <p>created_at: {{ user.createdAt }}</p>
         <p>updated_at: {{ user.updatedAt }}</p>
-        <p>sub: {{ user.topics }}</p>
+        <p *ngIf="user.topics.length != 0">sub: {{ user.topics }}</p>
+        <p *ngIf="user.topics.length == 0">sub: Vous n'êtes abonné à rien !</p>
     </div>
   `,
   styles: [

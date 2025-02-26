@@ -37,6 +37,7 @@ public class AuthController {
 
     @PostMapping("/register")
     public ResponseEntity<LoginResponse> register(@RequestBody @Validated RegisterRequest request) {
+        System.out.print("Request received in endpoint : " + request);
         return authService.register(request);
     }
 }

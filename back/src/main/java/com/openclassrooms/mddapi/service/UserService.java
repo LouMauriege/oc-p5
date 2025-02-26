@@ -4,6 +4,7 @@ import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.exception.UserNotFound;
 import com.openclassrooms.mddapi.mapper.UserMapper;
 import com.openclassrooms.mddapi.model.RegisterRequest;
+import com.openclassrooms.mddapi.model.Topic;
 import com.openclassrooms.mddapi.model.UpdateUserRequest;
 import com.openclassrooms.mddapi.model.User;
 import com.openclassrooms.mddapi.repository.UserRepository;
@@ -12,7 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.util.Collections;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 @RequiredArgsConstructor
@@ -37,6 +40,11 @@ public class UserService {
                 () -> new UserNotFound("Utilisateur non trouvé !")));
     }
 
+    public User getUserEntityByEmail(String email) {
+        return userRepository.findByEmail(email).orElseThrow(
+            () -> new UserNotFound("Utilisateur non trouvé !"));
+    }
+
     public boolean isEmailAvailable(String email) {
         Optional<User> userFind = userRepository.findByEmail(email);
         return userFind.isEmpty();
@@ -46,20 +54,40 @@ public class UserService {
         User user = User.builder()
                 .name(registerRequest.getName())
                 .email(registerRequest.getEmail())
+                .topics(Collections.emptySet())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .build();
         User createdUser = userRepository.save(user);
-        System.out.print(createdUser);
+        System.out.print("\nuserService.createUser : " + createdUser);
     }
 
     public void updateUser(Long userId, UpdateUserRequest updateUserRequest) {
         User existingUser = userRepository.findById(userId).orElseThrow(
-                () -> new UserNotFound("User non trouvé !")
-        );
+                () -> new UserNotFound("User non trouvé !"));
         existingUser.setName(updateUserRequest.getName());
         existingUser.setEmail(updateUserRequest.getEmail());
         existingUser.setPassword(passwordEncoder.encode(updateUserRequest.getPassword()));
         User updatedUser = userRepository.save(existingUser);
-        System.out.print(updatedUser);
+        System.out.print("\nuserService.updateUser : " + updatedUser);
+    }
+
+    public void addTopicToUserSubscription(String email, Topic topic) {
+        User existingUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFound("User non trouvé !"));
+        Set<Topic> topics = existingUser.getTopics();
+        topics.add(topic);
+        existingUser.setTopics(topics);
+        User updatedUser = userRepository.save(existingUser);
+        System.out.print("\nuserService.addTopicToUserSubscription : " + updatedUser);
+    }
+
+    public void removeTopicToUserSubscription(String email, Topic topic) {
+        User existingUser = userRepository.findByEmail(email).orElseThrow(
+                () -> new UserNotFound("User non trouvé !"));
+        Set<Topic> topics = existingUser.getTopics();
+        topics.remove(topic);
+        existingUser.setTopics(topics);
+        User updatedUser = userRepository.save(existingUser);
+        System.out.print("\nuserService.removeTopicToUserSubscription : " + updatedUser);
     }
 }
