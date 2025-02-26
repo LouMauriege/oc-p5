@@ -15,4 +15,16 @@ export class TopicService {
   public all(): Observable<Topic[]> {
     return this.httpClient.get<Topic[]>(this.pathService);
   }
+
+//   public getTopicById(topicId: number): Observable<Topic> {
+//     return this.httpClient.get<Topic>(`${this.pathService}/${topicId}`);
+//   }
+
+  public subscribe(topicName: string): any {
+    return this.httpClient.patch<any>(`${this.pathService}/subscribe/${topicName}`, null);
+  }
+
+  public unsubscribe(topicName: string): any {
+    return this.httpClient.patch<any>(`${this.pathService}/unsubscribe/${topicName}`, null);
+  }
 }

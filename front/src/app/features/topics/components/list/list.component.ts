@@ -11,6 +11,7 @@ import { TopicService } from '../../services/topic.service';
         <p>{{ topic.id }}</p>
         <p>{{ topic.name }}</p>
         <p>{{ topic.description }}</p>
+        <button (click)="subscribe(topic.name)">S'abonner</button>
     </div>
   `,
   styles: [
@@ -25,6 +26,14 @@ export class ListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+  }
+
+  public subscribe(topicName: string): void {
+    this.topicService.subscribe(topicName).subscribe(
+        (response: any) => {
+            console.log(response);
+        }
+    );
   }
 
 }

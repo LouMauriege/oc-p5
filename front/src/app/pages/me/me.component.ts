@@ -4,6 +4,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { SessionService } from '../../services/session.service';
+import { TopicService } from '../../features/topics/services/topic.service';
 import { User } from '../../interfaces/user.interface';
 import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequest.interface';
 
@@ -31,8 +32,11 @@ import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequ
         <p>email: {{ user.email }}</p>
         <p>created_at: {{ user.createdAt }}</p>
         <p>updated_at: {{ user.updatedAt }}</p>
-        <p *ngIf="user.topics.length != 0">sub: {{ user.topics }}</p>
-        <p *ngIf="user.topics.length == 0">sub: Vous n'êtes abonné à rien !</p>
+        <p>Abonnements :</p>
+        <div *ngFor="let topic of user.topics">
+            <p>{{ topic }}</p>
+            <button (click)="unsubscribe(topic)">Se désabonner</button>
+        </div>
     </div>
   `,
   styles: [
@@ -54,6 +58,7 @@ export class MeComponent implements OnInit {
     constructor(
         private authService: AuthService,
         private sessionService: SessionService,
+        private topicService: TopicService,
         private router: Router
     ) { }
 
@@ -82,5 +87,14 @@ export class MeComponent implements OnInit {
   public logout(): void {
     this.sessionService.logOut();
     this.router.navigate(['/']);
+  }
+
+  public unsubscribe(topicName: string): void {
+    this.topicService.unsubscribe(topicName).subscribe(
+        (response: any) => {
+            console.log(response);
+            window.location.reload();
+        }
+    )
   }
 }

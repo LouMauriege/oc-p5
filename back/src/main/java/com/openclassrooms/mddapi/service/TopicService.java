@@ -34,16 +34,16 @@ public class TopicService {
                 () -> new TopicNotFound("Topic non trouvé !")));
     }
 
-    public void subscribeUserToTopic(UserPrincipal userPrincipal, Long topicId) {
+    public void subscribeUserToTopic(UserPrincipal userPrincipal, String topicName) {
         String userEmail = userPrincipal.getEmail();
-        Topic topicExisting = topicRepository.findById(topicId).orElseThrow(
+        Topic topicExisting = topicRepository.findByName(topicName).orElseThrow(
                 () -> new TopicNotFound("Topic non trouvé !"));
         userService.addTopicToUserSubscription(userEmail, topicExisting);
     }
 
-    public void unsubscribeUserToTopic(UserPrincipal userPrincipal, Long topicId) {
+    public void unsubscribeUserToTopic(UserPrincipal userPrincipal, String topicName) {
         String userEmail = userPrincipal.getEmail();
-        Topic topicExisting = topicRepository.findById(topicId).orElseThrow(
+        Topic topicExisting = topicRepository.findByName(topicName).orElseThrow(
                 () -> new TopicNotFound("Topic non trouvé !"));
         userService.removeTopicToUserSubscription(userEmail, topicExisting);
     }

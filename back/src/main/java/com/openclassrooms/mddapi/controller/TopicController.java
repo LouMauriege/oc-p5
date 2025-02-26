@@ -21,19 +21,24 @@ public class TopicController {
         return ResponseEntity.ok(topicService.getTopics());
     }
 
-    @GetMapping("/subscribe/{topicId}")
+    @GetMapping("/{topicId}")
+    public ResponseEntity<TopicDto> getTopicById(Long topicId) {
+        return ResponseEntity.ok(topicService.getTopicById(topicId));
+    }
+
+    @PatchMapping("/subscribe/{topicName}")
     public ResponseEntity<?> subscribeUserToTopic(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long topicId) {
-        topicService.subscribeUserToTopic(userPrincipal, topicId);
+            @PathVariable String topicName) {
+        topicService.subscribeUserToTopic(userPrincipal, topicName);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 
-    @GetMapping("/unsubscribe/{topicId}")
+    @PatchMapping("/unsubscribe/{topicName}")
     public ResponseEntity<?> unsubscribeUserToTopic(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
-            @PathVariable Long topicId) {
-        topicService.unsubscribeUserToTopic(userPrincipal, topicId);
+            @PathVariable String topicName) {
+        topicService.unsubscribeUserToTopic(userPrincipal, topicName);
         return ResponseEntity.ok(HttpStatus.OK);
     }
 }
