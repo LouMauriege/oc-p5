@@ -17,9 +17,9 @@ import { User } from 'src/app/interfaces/user.interface';
   ],
   template: `
     <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <label for="username">Name :</label>
+        <label for="name">Name :</label>
         <input type="text" name="name" formControlName="name" id="name" required />
-        <label for="username">E-mail :</label>
+        <label for="email">E-mail :</label>
         <input type="text" name="email" formControlName="email" id="email" required />
         <label for="password">Mot de passe :</label>
         <input type="password" name="password" formControlName="password" id="password" required />

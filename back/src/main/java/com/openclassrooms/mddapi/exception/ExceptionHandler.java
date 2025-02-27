@@ -15,4 +15,9 @@ public class ExceptionHandler {
     public ResponseEntity<Object> topicNotFound(TopicNotFound topicNotFound) {
         return new ResponseEntity<>("Topic non trouvé !", HttpStatus.NOT_FOUND);
     }
+
+    @org.springframework.web.bind.annotation.ExceptionHandler({PostNotFound.class})
+    public ResponseEntity<Object> postTopicNotFound(PostNotFound postNotFound) {
+        return new ResponseEntity<>("Post non trouvé !", HttpStatus.NOT_FOUND);
+    }
 }

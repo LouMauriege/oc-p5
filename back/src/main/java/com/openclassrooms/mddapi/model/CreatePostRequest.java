@@ -1,22 +1,16 @@
-package com.openclassrooms.mddapi.dto;
+package com.openclassrooms.mddapi.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Builder
-public class PostDto {
-    private Long id;
-    private Long userId;
+public class CreatePostRequest {
     private String title;
     private String topicName;
     private String content;
-    private LocalDateTime createdAt;
-    private LocalDateTime updatedAt;
 }

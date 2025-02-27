@@ -22,6 +22,11 @@ public class UserController {
         return ResponseEntity.ok(userService.getUserById(userPrincipal.getUserId()));
     }
 
+    @GetMapping("{userId}")
+    public ResponseEntity<UserDto> getUserById(@PathVariable Long userId) {
+        return ResponseEntity.ok(userService.getUserById(userId));
+    }
+
     @PostMapping("/update")
     public ResponseEntity<?> register(
             @AuthenticationPrincipal UserPrincipal userPrincipal,

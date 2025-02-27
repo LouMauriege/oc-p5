@@ -28,6 +28,10 @@ export class AuthService {
     return this.httpClient.get<User>(`api/user/me`);
   }
 
+  public getUserById(userId: number) {
+    return this.httpClient.get<User>(`api/user/${userId}`);
+  }
+
   public update(updateUserRequest: UpdateUserRequest): any {
     return this.httpClient.post<UpdateUserRequest>(`api/user/update`, updateUserRequest);
   }

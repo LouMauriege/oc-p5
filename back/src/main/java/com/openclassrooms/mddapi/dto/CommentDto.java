@@ -1,5 +1,8 @@
 package com.openclassrooms.mddapi.dto;
 
+import com.openclassrooms.mddapi.model.Post;
+import com.openclassrooms.mddapi.model.User;
+import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -11,11 +14,10 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class PostDto {
+public class CommentDto {
     private Long id;
-    private Long userId;
-    private String title;
-    private String topicName;
+    private String userName;
+    private Long postId;
     private String content;
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;

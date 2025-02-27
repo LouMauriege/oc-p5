@@ -14,6 +14,11 @@ import { AuthGuard } from './guards/auth.guard';
 // to manage unauthenticated user to access private routes
 const routes: Routes = [
     {
+        path: 'posts',
+        canActivate: [AuthGuard],
+        loadChildren: () => import('./features/posts/posts.module').then(module => module.PostsModule)
+    },
+    {
         path: 'topics',
         canActivate: [AuthGuard],
         loadChildren: () => import('./features/topics/topics.module').then(module => module.TopicsModule)

@@ -11,8 +11,8 @@ import java.time.LocalDateTime;
 @ToString
 @Builder
 @Entity
-@Table(name = "POSTS")
-public class Post {
+@Table(name = "comments")
+public class Comment {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -22,11 +22,9 @@ public class Post {
     @JoinColumn(name = "user_id", referencedColumnName = "id", nullable = false)
     private User user;
 
-    private String title;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "topic_id", nullable = false)
-    private Topic topic;
+    @ManyToOne
+    @JoinColumn(name = "post_id", referencedColumnName = "id", nullable = false)
+    private Post post;
 
     private String content;
 

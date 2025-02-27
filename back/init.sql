@@ -65,7 +65,16 @@ INSERT INTO subscriptions (user_id, topic_id) VALUES
     (1, 3);
 
 INSERT INTO posts (user_id, topic_id, title, content) VALUES
-    (2, 1, 'Article sur le js', 'Mon super contenue pour un article js'),
-    (2, 2, 'Article sur le Yaml', 'Voici pourquoi je ne suis pas pratiquant des .properties'),
-    (2, 2, 'Encore le Yaml', 'Encore et toujours du YAML pour remplacer les fichiers properties'),
-    (2, 3, 'Du java ??', 'Pourquoi le logo est-il une tasse ?');
+        (2, 2, 'Article sur le Yaml', 'Voici pourquoi je ne suis pas pratiquant des .properties');
+
+INSERT INTO posts (user_id, topic_id, title, content, created_at, updated_at) VALUES
+        (2, 1, 'Article sur le js', 'Mon super contenu pour un article JS',
+            '2023-06-15 14:23:00', '2023-06-20 10:45:00'),
+        (2, 2, 'Encore le Yaml', 'Encore et toujours du YAML pour remplacer les fichiers properties',
+            '2022-12-05 17:15:00', '2023-01-08 08:50:00'),
+        (2, 3, 'Du java ??', 'Pourquoi le logo est-il une tasse ?',
+            '2023-08-21 12:00:00', '2023-09-05 16:30:00');
+
+INSERT INTO comments (post_id, user_id, content) VALUES
+        (1, 1, 'Trop nul.'),
+        (1, 2, 'Encore un com bien constructif...');
