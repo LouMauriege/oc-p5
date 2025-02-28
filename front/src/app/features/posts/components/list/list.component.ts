@@ -5,28 +5,33 @@ import { Post } from '../../interfaces/post.interface';
 import { PostService } from '../../services/post.service';
 import { AuthService } from '../../../auth/services/auth.service';
 import { User } from '../../../../interfaces/user.interface';
+import { CustomDatePipe } from 'src/app/shared/pipe/custom-date.pipe';
 
 @Component({
-  selector: 'app-list',
-  standalone: true,
-  imports: [CommonModule],
-  template: `
-    <div *ngFor="let post of posts">
-        <p>{{ post.id }}</p>
-        <p>{{ postsAuthor[post.id] }}</p>
-        <p>{{ post.title }}</p>
-        <p>{{ post.topicName }}</p>
-        <p>{{ post.content }}</p>
-        <p>{{ post.createdAt }}</p>
-        <p>{{ post.updatedAt }}</p>
-        <button (click)="seeDetail(post.id)">Voir plus ></button>
-    </div>
-    <div *ngIf="!posts || posts.length == 0">
-        <p>Vous ne suivez aucun thème...</p>
-    </div>
-  `,
-  styles: [
-  ]
+    selector: 'app-list',
+    standalone: true,
+    imports: [
+        CommonModule,
+        CustomDatePipe
+    ],
+    template: `
+        <button (click)="goToCreatePost()">Créer un post</button>
+        <div *ngFor="let post of posts">
+            <p>{{ post.id }}</p>
+            <p>{{ postsAuthor[post.id] }}</p>
+            <p>{{ post.title }}</p>
+            <p>{{ post.topicName }}</p>
+            <p>{{ post.content }}</p>
+            <p>{{ post.createdAt | customDate }}</p>
+            <p>{{ post.updatedAt | customDate }}</p>
+            <button (click)="seeDetail(post.id)">Voir plus ></button>
+        </div>
+        <div *ngIf="!posts || posts.length == 0">
+            <p>Vous ne suivez aucun thème...</p>
+        </div>
+    `,
+    styles: [
+    ]
 })
 export class ListComponent implements OnInit {
 
@@ -60,6 +65,10 @@ export class ListComponent implements OnInit {
 
     public seeDetail(postId: number): void {
         this.router.navigate(['/posts/detail', postId]);
+    }
+
+    public goToCreatePost(): void {
+        this.router.navigate(['/posts/create']);
     }
 
 }

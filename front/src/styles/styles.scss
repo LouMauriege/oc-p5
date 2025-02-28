@@ -1,4 +1,8 @@
 /* You can add global styles to this file, and also import other style files */
+:root {
+    --primary-color: #754fec;
+    --danger-color: #ed6145;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
@@ -18,6 +22,70 @@ li {
     list-style: none;
 }
 
+label {
+    margin-bottom: 4px;
+}
+
+button,
+input[type="text"],
+input[type="password"],
+input[type="submit"] {
+    border: 2px solid black;
+    border-radius: 8px;
+    background-color: white;
+    padding: 8px 24px;
+    margin-bottom: 24px;
+    cursor: pointer;
+}
+
+button.button--is-primary,
+input[type="text"].button--is-primary,
+input[type="password"].button--is-primary,
+input[type="submit"].button--is-primary {
+    background-color: var(--primary-color);
+    border-color: var(--primary-color);
+    color: white;
+}
+
+button,
+input[type="submit"] {
+    align-self: center;
+}
+
+.button--is-secondary {
+    border: none;
+    padding: none;
+    color: var(--danger-color);
+}
+
+input[type="text"],
+input[type="password"] {
+    padding: 8px 8px;
+}
+
 .error {
-    color: #ed6145;
+    color: var(--danger-color);
+}
+
+.info {
+    color: var(--primary-color);
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    margin: auto;
+    max-width: 300px;
+    padding: 0 16px;
+}
+
+.return-arrow {
+    margin: 16px 0 0 16px;
+    display: block;
+}
+
+h2.form-title {
+    margin: auto;
+    margin-bottom: 32px;
+    max-width: fit-content;
 }

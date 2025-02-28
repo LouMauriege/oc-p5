@@ -10,6 +10,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Map;
+
 @RestController
 @RequestMapping("post")
 public class PostController {
@@ -28,10 +30,10 @@ public class PostController {
     }
 
     @PostMapping()
-    public ResponseEntity<String> createPost(
+    public ResponseEntity<?> createPost(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody CreatePostRequest createPostRequest) {
         postService.createPost(userPrincipal.getUserId(), createPostRequest);
-        return ResponseEntity.ok("Post created !");
+        return ResponseEntity.ok(Map.of("message", "Post created !"));
     }
 }

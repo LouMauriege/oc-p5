@@ -3,7 +3,7 @@ import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment.service';
 import { CreateCommentRequest } from '../../interfaces/create-comment-request.interface';
 import { Comment } from '../../interfaces/comment.interface';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 
 @Component({
     selector: 'app-create-comment',
@@ -16,7 +16,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
         <form [formGroup]="commentRequest" (ngSubmit)="onSubmit()">
             <label for="content">Message :</label>
             <input type="text" name="content" formControlName="content" id="content" required />
-            <input type="submit" value="Envoyer" />
+            <input [disabled]="content?.errors?.['required']" type="submit" value="Envoyer" />
         </form>
     `,
     styles: [
@@ -28,7 +28,7 @@ export class CreateCommentComponent implements OnInit {
     @Input() postId: number | undefined;
 
     commentRequest = new FormGroup({
-        content: new FormControl('')
+        content: new FormControl('', Validators.required)
     })
 
     constructor(private commentService: CommentService) { }
@@ -43,9 +43,14 @@ export class CreateCommentComponent implements OnInit {
             (response: any) => {
                 console.log(response);
                 this.reloadComments.emit();
+                this.commentRequest.setValue({
+                    content: ''
+                });
                 // window.location.reload();
             }
         );
     }
+
+    get content() { return this.commentRequest.get('content'); }
 
 }

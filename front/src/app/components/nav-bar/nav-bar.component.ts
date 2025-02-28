@@ -18,9 +18,15 @@ import { NavigationEnd, Router } from '@angular/router'
     styles: [`
         .navbar {
             background-color: #f2f2f2;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
         }
         .navbar__logo {
             height: 80px;
+        }
+        .navbar__links-list {
+            display: flex;
         }
         .active {
             color: #754fec;

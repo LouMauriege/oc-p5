@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
+import { ReactiveFormsModule, FormGroup, FormControl, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../features/auth/services/auth.service';
@@ -8,6 +8,7 @@ import { SessionService } from '../../services/session.service';
 import { TopicService } from '../../features/topics/services/topic.service';
 import { User } from '../../interfaces/user.interface';
 import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequest.interface';
+import { passwordValidator } from 'src/app/features/auth/validators/password.validator';
 
 @Component({
   selector: 'app-me',
@@ -25,12 +26,20 @@ import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequ
         <input type="text" name="email" formControlName="email" id="email" required />
         <label for="newPassword">Nouveau mot de passe :</label>
         <input type="password" name="newPassword" formControlName="newPassword" id="newPassword" />
-        <label for="password">Mot de passe :</label>
+        <label for="password">Mot de passe* :</label>
         <input type="password" name="password" formControlName="password" id="password" required />
+        <ul *ngIf="newPassword?.invalid && password?.touched">
+            <li *ngIf="newPassword?.errors?.['length']">{{ newPassword?.errors?.['length'] }}</li>
+            <li *ngIf="newPassword?.errors?.['uppercase']">{{ newPassword?.errors?.['uppercase'] }}</li>
+            <li *ngIf="newPassword?.errors?.['lowercase']">{{ newPassword?.errors?.['lowercase'] }}</li>
+            <li *ngIf="newPassword?.errors?.['number']">{{ newPassword?.errors?.['number'] }}</li>
+            <li *ngIf="newPassword?.errors?.['special']">{{ newPassword?.errors?.['special'] }}</li>
+        </ul>
+        <p *ngIf="updated" class="info">Informations mises à jour</p>
         <p *ngIf="onLoading">Chargement...</p>
         <p *ngIf="onError" class="error">Mauvais mot de passe !</p>
-        <input type="submit" value="Sauvegarder" />
-        <button (click)="logout()">Se déconnecter</button>
+        <input type="submit" value="Sauvegarder" class="button--is-primary" />
+        <button (click)="logout()" class="button--is-secondary" >Se déconnecter</button>
     </form>
         <p>id: {{ user.id }}</p>
         <p>name: {{ user.name }}</p>
@@ -52,12 +61,15 @@ export class MeComponent implements OnInit {
     updateUserForm = new FormGroup({
         email: new FormControl(''),
         name: new FormControl(''),
-        newPassword: new FormControl(''),
-        password: new FormControl('')
+        newPassword: new FormControl('',
+            passwordValidator()
+        ),
+        password: new FormControl('', Validators.required)
     });
 
     public onError: boolean = false;
     public onLoading: boolean = false;
+    public updated: boolean = false;
 
     public user: User | undefined;
 
@@ -92,6 +104,7 @@ export class MeComponent implements OnInit {
 
     this.onLoading = true;
     this.onError = false;
+    this.updated = false;
 
     this.authService.update(updateUserRequest).pipe(
         finalize(() => {
@@ -101,6 +114,7 @@ export class MeComponent implements OnInit {
         (response: any) => {
             this.loadUserData();
             this.onError = false;
+            this.updated = true;
         },
         (error: any) => {
             this.onError = true
@@ -121,4 +135,7 @@ export class MeComponent implements OnInit {
         }
     )
   }
+
+    get newPassword() { return this.updateUserForm.get('newPassword'); }
+    get password() { return this.updateUserForm.get('password'); }
 }

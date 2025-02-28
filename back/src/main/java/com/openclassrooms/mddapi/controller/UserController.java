@@ -32,6 +32,5 @@ public class UserController {
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody UpdateUserRequest updateUserRequest) {
         return userService.updateUser(userPrincipal.getUserId(), updateUserRequest);
-//        return ResponseEntity.ok(HttpStatus.OK);
     }
 }
