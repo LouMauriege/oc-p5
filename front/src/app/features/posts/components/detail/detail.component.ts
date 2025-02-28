@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 import { Post } from '../../interfaces/post.interface';
@@ -26,13 +26,15 @@ import { CreateCommentComponent } from '../../../comments/components/create-comm
             <p>{{ post.createdAt }}</p>
             <p>{{ post.updatedAt }}</p>
             <comment-component [postId]="post.id"></comment-component>
-            <app-create-comment [postId]="post.id"></app-create-comment>
+            <app-create-comment [postId]="post.id" (reloadComments)="loadComments()"></app-create-comment>
         </div>
     `,
     styles: [
     ]
 })
-export class DetailComponent implements OnInit {
+export class DetailComponent implements OnInit, AfterViewInit {
+
+    @ViewChild(CommentComponent) commentComponent!: CommentComponent;
 
     public post: Post | undefined;
     public postAuthor: string | undefined;
@@ -56,6 +58,15 @@ export class DetailComponent implements OnInit {
                 );
             }
         );
+    }
+
+    ngAfterViewInit() {
+    }
+
+    public loadComments() {
+        if (this.commentComponent) {
+            this.commentComponent.loadComments();
+        }
     }
 
 }

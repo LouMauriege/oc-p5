@@ -1,12 +1,7 @@
 package com.openclassrooms.mddapi.service;
 
 import com.openclassrooms.mddapi.config.TokenConfig;
-import com.openclassrooms.mddapi.dto.UserDto;
-import com.openclassrooms.mddapi.exception.UserNotFound;
-import com.openclassrooms.mddapi.model.LoginRequest;
-import com.openclassrooms.mddapi.model.LoginResponse;
-import com.openclassrooms.mddapi.model.RegisterRequest;
-import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.model.*;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import com.openclassrooms.mddapi.security.JwtUtils;
 import com.openclassrooms.mddapi.security.UserPrincipal;
@@ -20,11 +15,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import javax.security.auth.login.LoginContext;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
 import java.util.Collections;
-import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -57,6 +48,16 @@ public class AuthService {
         return LoginResponse.builder()
                 .jwt(accessToken)
                 .build();
+    }
+
+    public Long getUserLoggedId(String userEmail, UpdateUserRequest request) {
+        Authentication authentication = authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(userEmail, request.getPassword())
+        );
+
+        UserPrincipal userPrincipal = (UserPrincipal) authentication.getPrincipal();
+
+        return userPrincipal.getUserId();
     }
 
     public ResponseEntity<LoginResponse> register(RegisterRequest request) {

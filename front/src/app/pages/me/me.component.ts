@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { finalize } from 'rxjs/operators';
 import { AuthService } from '../../features/auth/services/auth.service';
 import { SessionService } from '../../services/session.service';
 import { TopicService } from '../../features/topics/services/topic.service';
@@ -18,12 +19,16 @@ import { UpdateUserRequest } from '../../features/auth/interfaces/updateUserRequ
   template: `
     <div *ngIf="user">
     <form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
-        <label for="username">Name :</label>
+        <label for="name">Name :</label>
         <input type="text" name="name" formControlName="name" id="name" required />
-        <label for="username">E-mail :</label>
+        <label for="email">E-mail :</label>
         <input type="text" name="email" formControlName="email" id="email" required />
+        <label for="newPassword">Nouveau mot de passe :</label>
+        <input type="password" name="newPassword" formControlName="newPassword" id="newPassword" />
         <label for="password">Mot de passe :</label>
         <input type="password" name="password" formControlName="password" id="password" required />
+        <p *ngIf="onLoading">Chargement...</p>
+        <p *ngIf="onError" class="error">Mauvais mot de passe !</p>
         <input type="submit" value="Sauvegarder" />
         <button (click)="logout()">Se déconnecter</button>
     </form>
@@ -47,11 +52,12 @@ export class MeComponent implements OnInit {
     updateUserForm = new FormGroup({
         email: new FormControl(''),
         name: new FormControl(''),
+        newPassword: new FormControl(''),
         password: new FormControl('')
     });
 
-    public userName: String | undefined;
-    public userEmail: String | undefined;
+    public onError: boolean = false;
+    public onLoading: boolean = false;
 
     public user: User | undefined;
 
@@ -63,6 +69,10 @@ export class MeComponent implements OnInit {
     ) { }
 
   ngOnInit(): void {
+    this.loadUserData();
+  }
+
+  loadUserData(): void {
     this.authService.me().subscribe(
         (user: User) => {
             console.log(user);
@@ -70,6 +80,7 @@ export class MeComponent implements OnInit {
             this.updateUserForm.setValue({
                 email: user.email,
                 name: user.name,
+                newPassword: '',
                 password: ''
             });
         }
@@ -79,8 +90,21 @@ export class MeComponent implements OnInit {
   public async onSubmit(): Promise<void> {
     const updateUserRequest = this.updateUserForm.value as UpdateUserRequest;
 
-    this.authService.update(updateUserRequest).subscribe(
-        (response: any) => window.location.reload()
+    this.onLoading = true;
+    this.onError = false;
+
+    this.authService.update(updateUserRequest).pipe(
+        finalize(() => {
+            this.onLoading = false;
+        })
+    ).subscribe(
+        (response: any) => {
+            this.loadUserData();
+            this.onError = false;
+        },
+        (error: any) => {
+            this.onError = true
+        }
     );
   }
 
@@ -93,7 +117,7 @@ export class MeComponent implements OnInit {
     this.topicService.unsubscribe(topicName).subscribe(
         (response: any) => {
             console.log(response);
-            window.location.reload();
+            this.loadUserData();
         }
     )
   }

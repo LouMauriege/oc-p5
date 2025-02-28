@@ -28,10 +28,10 @@ public class UserController {
     }
 
     @PostMapping("/update")
-    public ResponseEntity<?> register(
+    public ResponseEntity<?> updateUser(
             @AuthenticationPrincipal UserPrincipal userPrincipal,
             @RequestBody UpdateUserRequest updateUserRequest) {
-        userService.updateUser(userPrincipal.getUserId(), updateUserRequest);
-        return ResponseEntity.ok(HttpStatus.OK);
+        return userService.updateUser(userPrincipal.getUserId(), updateUserRequest);
+//        return ResponseEntity.ok(HttpStatus.OK);
     }
 }

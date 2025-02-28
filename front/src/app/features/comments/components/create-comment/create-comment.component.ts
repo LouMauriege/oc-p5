@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { CommentService } from '../../services/comment.service';
 import { CreateCommentRequest } from '../../interfaces/create-comment-request.interface';
@@ -23,6 +23,7 @@ import { ReactiveFormsModule, FormGroup, FormControl } from '@angular/forms';
     ]
 })
 export class CreateCommentComponent implements OnInit {
+    @Output() reloadComments = new EventEmitter<void>();
 
     @Input() postId: number | undefined;
 
@@ -41,7 +42,8 @@ export class CreateCommentComponent implements OnInit {
         this.commentService.createComment(this.postId!, request).subscribe(
             (response: any) => {
                 console.log(response);
-                window.location.reload();
+                this.reloadComments.emit();
+                // window.location.reload();
             }
         );
     }

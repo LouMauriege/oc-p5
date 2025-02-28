@@ -7,6 +7,7 @@ import { AuthService } from '../../services/auth.service';
 import { RegisterRequest } from '../../interfaces/registerRequest.interface';
 import { LoginResponse } from '../../interfaces/loginResponse.interface';
 import { User } from 'src/app/interfaces/user.interface';
+import { SessionService } from 'src/app/services/session.service';
 
 @Component({
   selector: 'app-register',
@@ -16,15 +17,16 @@ import { User } from 'src/app/interfaces/user.interface';
     ReactiveFormsModule
   ],
   template: `
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
-        <label for="name">Name :</label>
-        <input type="text" name="name" formControlName="name" id="name" required />
-        <label for="email">E-mail :</label>
-        <input type="text" name="email" formControlName="email" id="email" required />
-        <label for="password">Mot de passe :</label>
-        <input type="password" name="password" formControlName="password" id="password" required />
-        <input type="submit" value="Se connecter" />
-    </form>
+        <a (click)="goHome()">Retour</a>
+        <form [formGroup]="registerForm" (ngSubmit)="onSubmit()">
+            <label for="name">Name :</label>
+            <input type="text" name="name" formControlName="name" id="name" required />
+            <label for="email">E-mail :</label>
+            <input type="text" name="email" formControlName="email" id="email" required />
+            <label for="password">Mot de passe :</label>
+            <input type="password" name="password" formControlName="password" id="password" required />
+            <input type="submit" value="Se connecter" />
+        </form>
   `,
   styles: [
   ]
@@ -39,23 +41,40 @@ export class RegisterComponent implements OnInit {
 
   constructor(
     private authService: AuthService,
-    private router: Router
+    private router: Router,
+    private sessionService: SessionService
   ) { }
 
   ngOnInit(): void {
+        this.authService.me().subscribe(
+            (user: User) => {
+                this.sessionService.logIn(user);
+                this.router.navigate(['/posts']);
+            },
+            (error) => {
+                this.sessionService.logOut();
+            }
+        );
   }
 
-  public async onSubmit(): Promise<void> {
+    public async onSubmit(): Promise<void> {
         const registerRequest = this.registerForm.value as RegisterRequest;
-
-        console.log(registerRequest);
 
         this.authService.register(registerRequest).subscribe(
             (response: LoginResponse) => {
                 localStorage.setItem('mdd_jwt', response.jwt);
-                this.router.navigate(['/me']);
+                this.authService.me().subscribe(
+                    (user: User) => {
+                        this.sessionService.logIn(user);
+                        this.router.navigate(['/topics']);
+                    }
+                );
             }
         );
-  }
+    }
+
+    public goHome(): void {
+        this.router.navigate(['/']);
+    }
 
 }

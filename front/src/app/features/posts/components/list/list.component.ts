@@ -21,6 +21,9 @@ import { User } from '../../../../interfaces/user.interface';
         <p>{{ post.updatedAt }}</p>
         <button (click)="seeDetail(post.id)">Voir plus ></button>
     </div>
+    <div *ngIf="!posts || posts.length == 0">
+        <p>Vous ne suivez aucun thème...</p>
+    </div>
   `,
   styles: [
   ]
