@@ -10,7 +10,7 @@ import { NavigationEnd, Router } from '@angular/router'
                 <ul class="navbar__links-list">
                     <li><a routerLink="/posts" routerLinkActive="active">Articles</a></li>
                     <li><a routerLink="/topics" routerLinkActive="active">Thèmes</a></li>
-                    <li><a routerLink="/me" routerLinkActive="active">me(image)</a></li>
+                    <li><a routerLink="/me" class="user-link" routerLinkActive="active"></a></li>
                 </ul>
             </div>
         </nav>
@@ -27,9 +27,21 @@ import { NavigationEnd, Router } from '@angular/router'
         }
         .navbar__links-list {
             display: flex;
+            align-items: center;
+            column-gap: 16px;
+            padding-right: 32px;
         }
         .active {
             color: #754fec;
+        }
+        .user-link {
+            background-image: url("/assets/user.png");
+            display: block;
+            width: 48px;
+            height: 48px;
+        }
+        .user-link.active {
+            background-image: url("/assets/user-active.png");
         }
     `]
 })

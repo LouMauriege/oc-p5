@@ -2,6 +2,7 @@
 :root {
     --primary-color: #754fec;
     --danger-color: #ed6145;
+    --light-bg: #fafafa;
 }
 
 html, body { height: 100%; }
@@ -29,7 +30,9 @@ label {
 button,
 input[type="text"],
 input[type="password"],
-input[type="submit"] {
+input[type="submit"],
+select,
+textarea {
     border: 2px solid black;
     border-radius: 8px;
     background-color: white;
@@ -59,8 +62,17 @@ input[type="submit"] {
 }
 
 input[type="text"],
-input[type="password"] {
+input[type="password"],
+select,
+textarea {
     padding: 8px 8px;
+    font: inherit;
+}
+
+textarea {
+    height: 200px;
+    min-width: calc(100% - 16px - 4px);
+    max-width: calc(100% - 16px - 4px);
 }
 
 .error {
@@ -88,4 +100,12 @@ h2.form-title {
     margin: auto;
     margin-bottom: 32px;
     max-width: fit-content;
+}
+
+.card {
+    background-color: var(--light-bg);
+}
+
+.card__title {
+    font-weight: bold;
 }

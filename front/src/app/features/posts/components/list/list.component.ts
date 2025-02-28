@@ -16,10 +16,10 @@ import { CustomDatePipe } from 'src/app/shared/pipe/custom-date.pipe';
     ],
     template: `
         <button (click)="goToCreatePost()">Créer un post</button>
-        <div *ngFor="let post of posts">
+        <div class="card" *ngFor="let post of posts">
             <p>{{ post.id }}</p>
             <p>{{ postsAuthor[post.id] }}</p>
-            <p>{{ post.title }}</p>
+            <p class="card__title">{{ post.title }}</p>
             <p>{{ post.topicName }}</p>
             <p>{{ post.content }}</p>
             <p>{{ post.createdAt | customDate }}</p>
