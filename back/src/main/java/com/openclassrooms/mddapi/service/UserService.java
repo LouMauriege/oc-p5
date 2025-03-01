@@ -3,10 +3,7 @@ package com.openclassrooms.mddapi.service;
 import com.openclassrooms.mddapi.dto.UserDto;
 import com.openclassrooms.mddapi.exception.UserNotFound;
 import com.openclassrooms.mddapi.mapper.UserMapper;
-import com.openclassrooms.mddapi.model.RegisterRequest;
-import com.openclassrooms.mddapi.model.Topic;
-import com.openclassrooms.mddapi.model.UpdateUserRequest;
-import com.openclassrooms.mddapi.model.User;
+import com.openclassrooms.mddapi.model.*;
 import com.openclassrooms.mddapi.repository.UserRepository;
 import com.openclassrooms.mddapi.security.UserPrincipal;
 import lombok.Locked;
@@ -21,10 +18,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.Collections;
-import java.util.Objects;
-import java.util.Optional;
-import java.util.Set;
+import java.util.*;
 
 @Service
 @RequiredArgsConstructor
@@ -78,22 +72,28 @@ public class UserService {
         User existingUser = userRepository.findById(userId).orElseThrow(
                 () -> new UserNotFound("User non trouvé !"));
 
-        Long authenticatedUserId = authService.getUserLoggedId(existingUser.getEmail(), updateUserRequest);
+        if (!Objects.equals(existingUser.getEmail(), updateUserRequest.getEmail()) && isEmailAvailable(updateUserRequest.getEmail()) ||
+                Objects.equals(existingUser.getEmail(), updateUserRequest.getEmail())) {
 
-        System.out.print("existingUserId : " + existingUser.getId() + " login id : " + authenticatedUserId);
-        if (Objects.equals(existingUser.getId(), authenticatedUserId)) {
-            existingUser.setName(updateUserRequest.getName());
-            existingUser.setEmail(updateUserRequest.getEmail());
-            if (!updateUserRequest.getNewPassword().isEmpty()) {
-                existingUser.setPassword(passwordEncoder.encode(updateUserRequest.getNewPassword()));
+            Long authenticatedUserId = authService.getUserLoggedId(existingUser.getEmail(), updateUserRequest);
+
+            if (Objects.equals(existingUser.getId(), authenticatedUserId)) {
+                existingUser.setName(updateUserRequest.getName());
+                existingUser.setEmail(updateUserRequest.getEmail());
+                if (!updateUserRequest.getNewPassword().isEmpty()) {
+                    existingUser.setPassword(passwordEncoder.encode(updateUserRequest.getNewPassword()));
+                }
+                User updatedUser = userRepository.save(existingUser);
+                System.out.print("\nuserService.updateUser : " + updatedUser);
+                return ResponseEntity.ok(HttpStatus.OK);
+            } else {
+                System.out.print("\nuserService.updateUser wrong password : " + updateUserRequest.getPassword());
+                return ResponseEntity.badRequest()
+                        .body(Map.of("message", "Mauvais mot de passe !"));
             }
-            User updatedUser = userRepository.save(existingUser);
-            System.out.print("\nuserService.updateUser : " + updatedUser);
-            return ResponseEntity.ok(HttpStatus.OK);
-        } else {
-            System.out.print("\nuserService.updateUser wrong password : " + updateUserRequest.getPassword());
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
         }
+        return ResponseEntity.badRequest()
+                .body(Map.of("message", "Email déjà utilisée.", "status", 400));
     }
 
     public void addTopicToUserSubscription(String email, Topic topic) {

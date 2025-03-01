@@ -27,14 +27,30 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
-        extractTokenFromRequest(request)
-                .map(jwtUtils::jwtDecoder)
-                .map(jwtUtils::jwtToPrincipal)
-                .map(UserPrincipalAuthenticationToken::new)
-                .ifPresent(authentication ->
-                        SecurityContextHolder.getContext().setAuthentication(authentication));
+//        extractTokenFromRequest(request)
+//                .map(jwtUtils::jwtDecoder)
+//                .map(jwtUtils::jwtToPrincipal)
+//                .map(UserPrincipalAuthenticationToken::new)
+//                .ifPresent(authentication ->
+//                        SecurityContextHolder.getContext().setAuthentication(authentication));
+//
+//        filterChain.doFilter(request, response);
+        try {
+            // Attempt to extract and decode JWT token
+            extractTokenFromRequest(request)
+                    .map(jwtUtils::jwtDecoder)  // Decode token
+                    .map(jwtUtils::jwtToPrincipal)  // Convert token to principal (user)
+                    .map(UserPrincipalAuthenticationToken::new)  // Create authentication token
+                    .ifPresent(authentication ->
+                            SecurityContextHolder.getContext().setAuthentication(authentication)
+                    );
 
-        filterChain.doFilter(request, response);
+            filterChain.doFilter(request, response);
+        } catch (Exception ex) {
+            response.setStatus(HttpServletResponse.SC_FORBIDDEN);
+            response.setContentType("application/json");
+            response.getWriter().write("{\"message\": \"Jwt authentication failed\"}");
+        }
     }
 
     private Optional<String> extractTokenFromRequest(HttpServletRequest request) {

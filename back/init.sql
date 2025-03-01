@@ -56,7 +56,7 @@ INSERT INTO users (name, email, password) VALUES
     ('Stewe2', 'stewe2@griffin.fox', '$2a$12$RTLVMmcLk/n9y712QIVOYOod4olXuS3p.MVGcnuSbEHkRVhMJeDHe');
 
 INSERT INTO topics (name, description) VALUES
-    ('Javascript', 'Discussions et méthodologies avec javascript.'),
+    ('Javascript', 'Discussions avec javascript.'),
     ('Yaml', 'Pourquoi le Yaml est-il bien meilleur que le .properties'),
     ('Java', 'Le java sous tous ses angles !');
 

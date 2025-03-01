@@ -36,8 +36,8 @@ import { PostRequest } from '../../interfaces/postRequest.interface';
             <input type="submit" [disabled]="postRequestForm.invalid" value="Créer" />
         </form>
     `,
-    styles: [
-    ]
+    styles: [`
+    `]
 })
 export class CreateComponent implements OnInit {
 

@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ReactiveFormsModule, Validators, FormGroup, FormControl } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -23,6 +23,7 @@ import { SessionService } from 'src/app/services/session.service';
             <path d="M0.939339 10.9393C0.353554 11.5251 0.353554 12.4749 0.939339 13.0607L10.4853 22.6066C11.0711 23.1924 12.0208 23.1924 12.6066 22.6066C13.1924 22.0208 13.1924 21.0711 12.6066 20.4853L4.12132 12L12.6066 3.51472C13.1924 2.92893 13.1924 1.97919 12.6066 1.3934C12.0208 0.807611 11.0711 0.807611 10.4853 1.3934L0.939339 10.9393ZM41 10.5L2 10.5V13.5L41 13.5V10.5Z" fill="black"/>
             </svg>
         </a>
+        <img class="mobile-logo" src="../../../../../assets/logo_p6.png" />
         <form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
             <h2 class="form-title">Se connecter</h2>
             <label for="email">E-mail :</label>
@@ -35,10 +36,27 @@ import { SessionService } from 'src/app/services/session.service';
         </form>
     `,
     styles: [`
+        .mobile-logo {
+            display: none;
+        }
+        @media (max-width: 700px) {
+            .mobile-logo {
+                display: block;
+                width: 225px;
+                height: 130px;
+                margin: auto;
+            }
+        }
     `]
 })
 export class LoginComponent implements OnInit {
 
+    @HostListener('window:resize', ['$event'])
+    onResize(event: any) {
+        this.screenWidth = window.innerWidth;
+    }
+
+    public screenWidth: number = window.innerWidth;
     public onError = false;
 
     loginForm = new FormGroup({
@@ -53,6 +71,8 @@ export class LoginComponent implements OnInit {
     ) {}
 
     ngOnInit(): void {
+        this.screenWidth = window.innerWidth;
+
         this.authService.me().subscribe(
             (user: User) => {
                 this.sessionService.logIn(user);

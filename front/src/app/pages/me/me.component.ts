@@ -18,43 +18,52 @@ import { passwordValidator } from 'src/app/features/auth/validators/password.val
     ReactiveFormsModule
 ],
   template: `
-    <div *ngIf="user">
-    <form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
-        <label for="name">Name :</label>
-        <input type="text" name="name" formControlName="name" id="name" required />
-        <label for="email">E-mail :</label>
-        <input type="text" name="email" formControlName="email" id="email" required />
-        <label for="newPassword">Nouveau mot de passe :</label>
-        <input type="password" name="newPassword" formControlName="newPassword" id="newPassword" />
-        <label for="password">Mot de passe* :</label>
-        <input type="password" name="password" formControlName="password" id="password" required />
-        <ul *ngIf="newPassword?.invalid && password?.touched">
-            <li *ngIf="newPassword?.errors?.['length']">{{ newPassword?.errors?.['length'] }}</li>
-            <li *ngIf="newPassword?.errors?.['uppercase']">{{ newPassword?.errors?.['uppercase'] }}</li>
-            <li *ngIf="newPassword?.errors?.['lowercase']">{{ newPassword?.errors?.['lowercase'] }}</li>
-            <li *ngIf="newPassword?.errors?.['number']">{{ newPassword?.errors?.['number'] }}</li>
-            <li *ngIf="newPassword?.errors?.['special']">{{ newPassword?.errors?.['special'] }}</li>
-        </ul>
-        <p *ngIf="updated" class="info">Informations mises à jour</p>
-        <p *ngIf="onLoading">Chargement...</p>
-        <p *ngIf="onError" class="error">Mauvais mot de passe !</p>
-        <input type="submit" value="Sauvegarder" class="button--is-primary" />
-        <button (click)="logout()" class="button--is-secondary" >Se déconnecter</button>
-    </form>
-        <p>id: {{ user.id }}</p>
-        <p>name: {{ user.name }}</p>
-        <p>email: {{ user.email }}</p>
-        <p>created_at: {{ user.createdAt }}</p>
-        <p>updated_at: {{ user.updatedAt }}</p>
-        <p>Abonnements :</p>
-        <div *ngFor="let topic of user.topics">
-            <p>{{ topic }}</p>
-            <button (click)="unsubscribe(topic)">Se désabonner</button>
+        <div class="component-wrapper">
+            <div *ngIf="user">
+                <form [formGroup]="updateUserForm" (ngSubmit)="onSubmit()">
+                    <h2 class="form-title">Profil utilisateur</h2>
+                    <label for="name">Name :</label>
+                    <input type="text" name="name" formControlName="name" id="name" required />
+                    <label for="email">E-mail :</label>
+                    <input type="text" name="email" formControlName="email" id="email" required />
+                    <label for="newPassword">Nouveau mot de passe :</label>
+                    <input type="password" name="newPassword" formControlName="newPassword" id="newPassword" />
+                    <label for="password">Mot de passe* :</label>
+                    <input type="password" name="password" formControlName="password" id="password" required />
+                    <ul *ngIf="newPassword?.invalid && password?.touched">
+                        <li *ngIf="newPassword?.errors?.['length']">{{ newPassword?.errors?.['length'] }}</li>
+                        <li *ngIf="newPassword?.errors?.['uppercase']">{{ newPassword?.errors?.['uppercase'] }}</li>
+                        <li *ngIf="newPassword?.errors?.['lowercase']">{{ newPassword?.errors?.['lowercase'] }}</li>
+                        <li *ngIf="newPassword?.errors?.['number']">{{ newPassword?.errors?.['number'] }}</li>
+                        <li *ngIf="newPassword?.errors?.['special']">{{ newPassword?.errors?.['special'] }}</li>
+                    </ul>
+                    <p *ngIf="updated" class="info">Informations mises à jour</p>
+                    <p *ngIf="onLoading">Chargement...</p>
+                    <p *ngIf="onError.state" class="error">{{ onError.message }}</p>
+                    <input type="submit" value="Sauvegarder" class="button--is-primary margin-bottom-8" />
+                    <button (click)="logout()" class="button--is-secondary" >Se déconnecter</button>
+                </form>
+                <hr />
+                <h2 class="form-title">Abonnements</h2>
+                <div class="card-grid">
+                    <div *ngFor="let topic of user.topics" class="card">
+                    <p>{{ topic }}</p>
+                    <button (click)="unsubscribe(topic)" class="button--is-primary">Se désabonner</button>
+                    </div>
+                </div>
+            </div>
         </div>
-    </div>
-  `,
-  styles: [
-  ]
+    `,
+    styles: [`
+        .component-wrapper {
+            padding: 64px;
+            max-width: 1000px;
+            margin: auto;
+        }
+        .margin-bottom-8 {
+            margin-bottom: 8px;
+        }
+    `]
 })
 export class MeComponent implements OnInit {
 
@@ -67,7 +76,10 @@ export class MeComponent implements OnInit {
         password: new FormControl('', Validators.required)
     });
 
-    public onError: boolean = false;
+    public onError = {
+        state: false,
+        message: ''
+    }
     public onLoading: boolean = false;
     public updated: boolean = false;
 
@@ -103,7 +115,8 @@ export class MeComponent implements OnInit {
     const updateUserRequest = this.updateUserForm.value as UpdateUserRequest;
 
     this.onLoading = true;
-    this.onError = false;
+    this.onError.state = false;
+    this.onError.message = '';
     this.updated = false;
 
     this.authService.update(updateUserRequest).pipe(
@@ -113,11 +126,20 @@ export class MeComponent implements OnInit {
     ).subscribe(
         (response: any) => {
             this.loadUserData();
-            this.onError = false;
+            this.onError.state = false;
+            this.onError.message = '';
             this.updated = true;
         },
         (error: any) => {
-            this.onError = true
+            this.onError.state = true;
+                if(error.status == 400) {
+                    this.onError.message = error.error.message;
+                } else if(error.status == 403){
+                    this.onError.message = 'Mauvais mot de passe !';
+                } else {
+                    this.onError.message = 'Erreur dans la mise à jours des infos...'
+                }
+                console.log(error.status);
         }
     );
   }

@@ -50,6 +50,15 @@ input[type="submit"].button--is-primary {
     color: white;
 }
 
+button:hover,
+input[type="text"]:hover,
+input[type="password"]:hover,
+input[type="submit"]:hover,
+select:hover,
+textarea:hover {
+    filter: brightness(0.9);
+}
+
 button,
 input[type="submit"] {
     align-self: center;
@@ -102,10 +111,49 @@ h2.form-title {
     max-width: fit-content;
 }
 
-.card {
-    background-color: var(--light-bg);
+.card-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 32px;
 }
 
-.card__title {
-    font-weight: bold;
+.card {
+    background-color: var(--light-bg);
+    padding: 24px;
+    border-radius: 16px;
+
+    .card__title {
+        font-weight: bold;
+    }
+
+    .card__content {
+        display: -webkit-box;
+        line-clamp: 5;
+        -webkit-line-clamp: 5;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .card__infos-wrapper {
+        display: flex;
+        column-gap: 8px;
+    }
+
+    button,
+    input[type="text"],
+    input[type="password"],
+    input[type="submit"],
+    select,
+    textarea {
+        margin: 0;
+    }
+}
+
+@media (max-width: 700px) {
+.card-grid {
+    grid-template-columns: 1fr;
+}
+.return-arrow {
+    margin-top: 64px;
+}
 }

@@ -15,23 +15,32 @@ import { CustomDatePipe } from 'src/app/shared/pipe/custom-date.pipe';
         CustomDatePipe
     ],
     template: `
-        <button (click)="goToCreatePost()">Créer un post</button>
-        <div class="card" *ngFor="let post of posts">
-            <p>{{ post.id }}</p>
-            <p>{{ postsAuthor[post.id] }}</p>
-            <p class="card__title">{{ post.title }}</p>
-            <p>{{ post.topicName }}</p>
-            <p>{{ post.content }}</p>
-            <p>{{ post.createdAt | customDate }}</p>
-            <p>{{ post.updatedAt | customDate }}</p>
-            <button (click)="seeDetail(post.id)">Voir plus ></button>
-        </div>
-        <div *ngIf="!posts || posts.length == 0">
-            <p>Vous ne suivez aucun thème...</p>
+        <div class="component-wrapper">
+            <button class="button--is-primary" (click)="goToCreatePost()">Créer un article</button>
+            <div class="card-grid">
+                <div class="card" *ngFor="let post of posts">
+                    <p class="card__title">{{ post.title }} - {{ post.topicName }}</p>
+                    <div class="card__infos-wrapper">
+                        <p>{{ postsAuthor[post.id] }}</p>
+                        <p>-</p>
+                        <p>{{ post.createdAt | customDate }}</p>
+                    </div>
+                    <p class="card__content">{{ post.content }}</p>
+                    <button (click)="seeDetail(post.id)">Voir plus ></button>
+                </div>
+            </div>
+            <div *ngIf="!posts || posts.length == 0">
+                <p>Vous ne suivez aucun thème...</p>
+            </div>
         </div>
     `,
-    styles: [
-    ]
+    styles: [`
+        .component-wrapper {
+            padding: 64px;
+            max-width: 1000px;
+            margin: auto;
+        }
+    `]
 })
 export class ListComponent implements OnInit {
 

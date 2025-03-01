@@ -16,6 +16,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collections;
+import java.util.Map;
 
 @Service
 @RequiredArgsConstructor
@@ -60,7 +61,7 @@ public class AuthService {
         return userPrincipal.getUserId();
     }
 
-    public ResponseEntity<LoginResponse> register(RegisterRequest request) {
+    public ResponseEntity<?> register(RegisterRequest request) {
         if (userService.isEmailAvailable(request.getEmail())) {
             LoginRequest loginRequest = LoginRequest.builder()
                     .email(request.getEmail())
@@ -69,7 +70,8 @@ public class AuthService {
             userService.createUser(request);
             return ResponseEntity.ok(login(loginRequest));
         }
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).build();
+        return ResponseEntity.badRequest()
+                .body(Map.of("message", "Email déjà utilisée."));
     }
 
 }

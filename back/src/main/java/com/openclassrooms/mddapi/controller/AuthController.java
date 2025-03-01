@@ -29,13 +29,8 @@ public class AuthController {
         return authService.login(request);
     }
 
-//    @PostMapping("/logout")
-//    public ResponseEntity<String> logout(@RequestBody Map<String, String> request) {
-//        return ResponseEntity.ok("Logged out successfully !");
-//    }
-//
     @PostMapping("/register")
-    public ResponseEntity<LoginResponse> register(@RequestBody @Validated RegisterRequest request) {
+    public ResponseEntity<?> register(@RequestBody @Validated RegisterRequest request) {
         System.out.print("Request received in endpoint : " + request);
         return authService.register(request);
     }
