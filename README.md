@@ -8,18 +8,18 @@ Don't forget to install your node_modules before starting (`npm install`).
 
 ### Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+Run `npn run start` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-### Build
+## Backend
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+The backend is done with java you need java jdk v17.
 
-### Where to start
+And also maven 3.9.9.
 
-As you may have seen if you already started the app, a simple home page containing a logo, a title and a button is available. If you take a look at its code (in the `home.component.html`) you will see that an external UI library is already configured in the project.
+Run `mvn clean install` to install all dependencies.
 
-This library is `@angular/material`, it's one of the most famous in the angular ecosystem. As you can see on their docs (https://material.angular.io/), it contains a lot of highly customizable components that will help you design your interfaces quickly.
+Then run `mvn spring-boot:run` to start the application.
 
-Note: I recommend to use material however it's not mandatory, if you prefer you can get rid of it.
+## Database
 
-Good luck!
+The database is containerized with docker. So docker needed to be installed on you computer to run properly the backend which initializes the db.
